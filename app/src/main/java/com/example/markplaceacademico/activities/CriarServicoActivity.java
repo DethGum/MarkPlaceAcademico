@@ -5,6 +5,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import android.content.SharedPreferences;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.markplaceacademico.R;
@@ -47,13 +49,22 @@ public class CriarServicoActivity extends AppCompatActivity {
             double preco =
                     Double.parseDouble(
                             editPreco.getText().toString());
+            SharedPreferences preferences =
+                    getSharedPreferences(
+                            "user_session",
+                            MODE_PRIVATE);
 
+            String emailUsuario =
+                    preferences.getString(
+                            "email",
+                            "");
             boolean sucesso =
                     db.inserirServico(
                             titulo,
                             descricao,
                             categoria,
-                            preco
+                            preco,
+                            emailUsuario
                     );
 
             if (sucesso) {

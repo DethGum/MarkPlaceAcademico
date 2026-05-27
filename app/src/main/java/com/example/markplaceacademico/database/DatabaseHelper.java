@@ -6,12 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "marketplace.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_USUARIOS = "usuarios";
     public static final String TABLE_SERVICOS = "servicos";
@@ -33,7 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(@NonNull SQLiteDatabase db) {
 
         String createUsuariosTable = "CREATE TABLE " + TABLE_USUARIOS + " ("
                 + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
@@ -98,7 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean inserirServico(String titulo,
                                   String descricao,
                                   String categoria,
-                                  double preco) {
+                                  double preco,
+                                  String usuarioEmail) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -107,7 +109,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COL_TITULO, titulo);
         values.put(COL_DESCRICAO, descricao);
         values.put(COL_CATEGORIA, categoria);
-        values.put(COL_PRECO, preco);
+        values.put(COL_USUARIO_EMAIL,
+                usuarioEmail);
 
         long resultado = db.insert(TABLE_SERVICOS,
                 null,
