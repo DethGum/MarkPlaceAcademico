@@ -7,16 +7,31 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <Button
-        android:id="@+id/btnCriarServico"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Criar Serviço"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btnCriarServico"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:text="Criar Serviço"
+            android:layout_weight="1"/>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_marginStart="10dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnLogout"
+            android:text="@string/logout"
+            android:layout_weight="2"/>
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerServicos"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
 </LinearLayout>

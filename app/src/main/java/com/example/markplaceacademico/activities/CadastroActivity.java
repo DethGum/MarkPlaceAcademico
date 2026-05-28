@@ -1,5 +1,6 @@
 package com.example.markplaceacademico.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,10 @@ public class CadastroActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
 
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+
         editNome = findViewById(R.id.editNome);
         editEmail = findViewById(R.id.editEmail);
         editSenha = findViewById(R.id.editSenha);
@@ -36,19 +41,37 @@ public class CadastroActivity extends AppCompatActivity {
             String email = editEmail.getText().toString();
             String senha = editSenha.getText().toString();
 
-            boolean sucesso = db.inserirUsuario(nome, email, senha);
+            if (nome.isEmpty() || email.isEmpty() || senha.isEmpty()){
+                Toast.makeText(this, "Todos os campos devem ser preenchidos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            if (sucesso) {
+            boolean exists = db.verificarLogin(email, senha);
 
-                Toast.makeText(this,
-                        "Usuário cadastrado com sucesso!",
-                        Toast.LENGTH_SHORT).show();
+            if (exists){
+                Toast.makeText(this, "Usuário Já Registrado", Toast.LENGTH_SHORT).show();
+            } else{
+                boolean sucesso = db.inserirUsuario(nome, email, senha);
 
-            } else {
+                if (sucesso) {
 
-                Toast.makeText(this,
-                        "Erro ao cadastrar usuário!",
-                        Toast.LENGTH_SHORT).show();
-            }});
+                    Toast.makeText(this,
+                            "Usuário cadastrado com sucesso!",
+                            Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                } else {
+
+                    Toast.makeText(this,
+                            "Erro ao cadastrar usuário!",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+
+        });
     }
 }

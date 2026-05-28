@@ -24,8 +24,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+
+        SharedPreferences s = getSharedPreferences("usuario", MODE_PRIVATE);
+
+        String l = s.getString("LOGIN", "");
+        String p = s.getString("PASS", "");
+
         editEmailLogin = findViewById(R.id.editEmailLogin);
         editSenhaLogin = findViewById(R.id.editSenhaLogin);
+
+        editEmailLogin.setText(l);
+        editSenhaLogin.setText(p);
 
         btnLoginUsuario = findViewById(R.id.btnLoginUsuario);
 
@@ -36,16 +48,23 @@ public class LoginActivity extends AppCompatActivity {
             String email = editEmailLogin.getText().toString();
             String senha = editSenhaLogin.getText().toString();
 
+            if (email.isEmpty() || senha.isEmpty()){
+                Toast.makeText(this, "Todos os campos devem ser preenchidos!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             boolean loginValido = db.verificarLogin(email, senha);
 
             if (loginValido) {
 
-                SharedPreferences prefs =
-                        getSharedPreferences("usuario", MODE_PRIVATE);
+                SharedPreferences prefs = getSharedPreferences("usuario", MODE_PRIVATE);
 
-                prefs.edit()
-                        .putString("email", email)
-                        .apply();
+                SharedPreferences.Editor edit = prefs.edit();
+
+                edit.putString("LOGIN", email);
+                edit.putString("PASS", senha);
+                edit.putBoolean("LOGGED", true);
+                edit.apply();
 
                 Toast.makeText(this,
                         "Login realizado!",
@@ -55,7 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                         new Intent(LoginActivity.this,
                                 HomeActivity.class);
 
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                finish();
 
             } else {
 

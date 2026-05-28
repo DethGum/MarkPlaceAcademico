@@ -1,6 +1,10 @@
 package com.example.markplaceacademico.activities;
 
+import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK;
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.Button;
@@ -19,7 +23,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    Button btnCriarServico;
+    Button btnCriarServico, btnLogout;
 
     RecyclerView recyclerServicos;
 
@@ -34,10 +38,13 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        btnCriarServico = findViewById(R.id.btnCriarServico);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
 
-        recyclerServicos =
-                findViewById(R.id.recyclerServicos);
+        btnCriarServico = findViewById(R.id.btnCriarServico);
+        btnLogout = findViewById(R.id.btnLogout);
+        recyclerServicos = findViewById(R.id.recyclerServicos);
 
         db = new DatabaseHelper(this);
 
@@ -55,6 +62,18 @@ public class HomeActivity extends AppCompatActivity {
                             CriarServicoActivity.class);
 
             startActivity(intent);
+        });
+        btnLogout.setOnClickListener(view -> {
+            SharedPreferences s = getSharedPreferences("usuario", MODE_PRIVATE);
+            SharedPreferences.Editor edit = s.edit();
+
+            edit.putBoolean("LOGGED", false);
+            edit.apply();
+            
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK | FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
         });
     }
     @Override

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MarkPlaceAcademico</string>
+    <string name="logout">Sair</string>
 </resources>

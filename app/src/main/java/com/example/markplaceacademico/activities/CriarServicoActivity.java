@@ -26,6 +26,10 @@ public class CriarServicoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_criar_servico);
 
+        if(getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+
         editTitulo = findViewById(R.id.editTitulo);
         editDescricao = findViewById(R.id.editDescricao);
         editCategoria = findViewById(R.id.editCategoria);
